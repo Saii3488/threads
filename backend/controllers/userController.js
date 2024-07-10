@@ -58,7 +58,7 @@ const loginUser=async(req,res)=>{
 
   }catch(err){
     res.status(500).json({ error: err.message });
-    console.log("Error in signupUser: ", err.message);
+    console.log("Error in loginUser: ", err.message);
   }
 }
 const logoutUser=(req,res)=>{
@@ -67,7 +67,26 @@ const logoutUser=(req,res)=>{
 		res.status(200).json({ message: "User logged out successfully" });
 	} catch (err) {
 		res.status(500).json({ error: err.message });
-		console.log("Error in signupUser: ", err.message);
+		console.log("Error in logoutUser: ", err.message);
+	}
+}
+const followUnFollowUser=async(req,res)=>{
+	try{
+		const{id}=req.params;
+		const userToModify=await User.findById(id);
+		const currentUser=await User.findById(req.user._id)
+		if (id === req.user._id.toString())
+			return res.status(400).json({ error: "You cannot follow/unfollow yourself" });
+
+		if (!userToModify || !currentUser) return res.status(400).json({ error: "User not found" });
+
+		const isFollowing = currentUser.following.includes(id);
+
+
+
+	}catch(err){
+		res.status(500).json({ error: err.message });
+		console.log("Error in followUnFollowUser: ", err.message);
 	}
 }
 export{signupUser,loginUser,logoutUser}
