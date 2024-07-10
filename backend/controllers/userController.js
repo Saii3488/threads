@@ -81,6 +81,20 @@ const followUnFollowUser=async(req,res)=>{
 		if (!userToModify || !currentUser) return res.status(400).json({ error: "User not found" });
 
 		const isFollowing = currentUser.following.includes(id);
+		if(isFollowing){
+         //Unfollow user
+		 //update current user following array and also uder to modify  followers array
+		 await User.findByIdAndUpdate(id,{$pull:{followers:req.user._id}})
+		 await User.findByIdAndUpdate(req.user._id,{$pull:{following:id}})
+		 res.status(200).json({ message: "User unfollowed successfully" });
+
+		}else{
+          //follow user
+		  await User.findByIdAndUpdate(id,{$push:{followers:req.user._id}})
+		  await User.findByIdAndUpdate(req.user._id,{$push:{following:id}})
+		  res.status(200).json({ message: "User followed successfully" });
+
+		}
 
 
 
@@ -89,4 +103,4 @@ const followUnFollowUser=async(req,res)=>{
 		console.log("Error in followUnFollowUser: ", err.message);
 	}
 }
-export{signupUser,loginUser,logoutUser}
+export{signupUser,loginUser,logoutUser,followUnFollowUser}
