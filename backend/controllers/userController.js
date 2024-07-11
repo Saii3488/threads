@@ -2,6 +2,19 @@ import bcrypt from "bcryptjs"
 import User from "../models/userModel.js";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 
+const getUserProfile=async(req,res)=>{
+	const{username}=req.params;
+
+	try{
+      const user=await User.findOne({username}).select("-password").select("-updatedAt")
+	  if(!user) return res.status(400).json({ error: "User not found" });
+	  res.status(200).json(user)
+	
+	}catch(err){
+		res.status(500).json({ error: err.message });
+		console.log("Error in UpdatingUser: ", err.message);
+	}
+}
 const signupUser=async(req,res)=>{
   try{
    const{name,username,email,password}=req.body;
@@ -139,4 +152,5 @@ const updateUser=async(req,res)=>{
 		console.log("Error in UpdatingUser: ", err.message);
 	}
 }
-export{signupUser,loginUser,logoutUser,followUnFollowUser,updateUser}
+
+export{signupUser,loginUser,logoutUser,followUnFollowUser,updateUser,getUserProfile}
