@@ -1,6 +1,7 @@
 import { Flex,Button } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import React from 'react'
+import AuthPage from './AuthPage'
 
 const HomePage = () => {
   return (
